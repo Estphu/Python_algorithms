@@ -18,28 +18,24 @@ def four_digit_mastermind():
         result = ['B','B','B','B']
         user_guess_nums = input('Enter your four digit guess code: ')
         user_guess_lists = list(user_guess_nums)
-        user_guess_nums_len = user_guess_nums.__len__()
-        if user_guess_nums_len == 4:        
-            for user_guess_num in user_guess_lists:
-                for random_four_digit in random_four_digits:
-                    user_index = user_guess_lists.index(user_guess_num)
-                    guess_index = random_four_digits.index(random_four_digit)
+        user_guess_nums_len = len(user_guess_nums)
+        if user_guess_nums_len == 4:     
+            for user_index, user_guess_num in enumerate(user_guess_lists):
+                for guess_index, random_four_digit in enumerate(random_four_digits):
                     if user_guess_num == random_four_digit:
                         if user_index == guess_index:
                             result[user_index] = 'R'
                         else:
-                            result[user_guess_lists.index(user_guess_num)] = 'Y'
+                            result[user_index] = 'Y'
 
-            print(result)         
+            print(result)
             if result == ['R','R','R','R']:
-                print(''.join(result)) 
+                print(''.join(result))
                 print('>>> CONGRATULATIONS IT MATCHED <<<')
                 break
         else:
             print("FOUL!!! PLEASE ENTER FOUR DIGITS")
-            continue            
-                      
-                                    
+            continue
 
 if __name__ == '__main__':
     four_digit_mastermind()

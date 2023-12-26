@@ -13,6 +13,7 @@ def generate_random_alphabets(sentence):
             alphabet = ''
             while sentence_alphabet != alphabet:
                 alphabet = random.choice(string.ascii_letters)
+                print('MONKEY GOING CRAZY: '+alphabet)
                 if sentence_alphabet == alphabet:
                     matched_alphabets.append(alphabet)
                           
