@@ -1,13 +1,25 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
+import re
 
 url = 'https://interactive.aljazeera.com/aje/2018/live-results-pakistan-election-day-2018/index.html'
+# Get the path to the downloaded EdgeDriver executable
+edge_driver_path = EdgeChromiumDriverManager().install() + '.exe'
 
-# Set up the Selenium WebDriver (make sure you have the appropriate driver installed)
-driver = webdriver.Chrome()  # You might need to adjust the path or use another driver
+# Specify the path to the Microsoft Edge binary
+edge_binary_path = '/path/to/microsoft-edge-binary'  # Replace with the actual path
+
+# Set up Edge options
+edge_options = webdriver.EdgeOptions()
+edge_options.binary_location = edge_binary_path
+
+driver = webdriver.Edge(service=EdgeService(executable_path=edge_driver_path), options=edge_options)  # You might need to adjust the path or use another driver
 
 try:
     # Load the page
@@ -45,6 +57,14 @@ try:
                 election_dict[constituency_id]['polled_votes'] = value.get_text().replace('VOTES POLLED','')
             elif 'VOTES' in value.get_text():
                 election_dict[constituency_id]['votes'] = value.get_text().replace('VOTES','')
+
+        # Extract border color from the style attribute
+        border_color_match = re.search(r'box-shadow:\s*([^;]+)', content['style'])
+        match = re.search(r'box-shadow:[^;]+(\b\w+)', content['style'])
+        
+        if border_color_match:
+            election_dict[constituency_id]['border_color'] = border_color_match.group(1)
+            election_dict[constituency_id]['color'] = match.group(1)
 
     print(election_dict)
 
