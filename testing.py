@@ -1,5 +1,6 @@
-from random import choice
+import random
 
-num = choice(range(1,7))
+def generate_otp():
+    return ''.join([str(random.randint(0, 9)) for _ in range(6)])
 
-print(num)
+print(generate_otp())
